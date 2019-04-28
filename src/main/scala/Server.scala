@@ -9,22 +9,12 @@ import org.http4s.server.middleware.Logger
 import fs2.Stream
 import scala.concurrent.ExecutionContext.global
 
-import config.Config
-
-
 object Server {
-
-  //val cfg = Stream.eval(Config.load())
-  //config.shit()
 
   def stream[F[_]: ConcurrentEffect](implicit T: Timer[F], C: ContextShift[F]): Stream[F, Nothing] = {
     for {
       
-      cfg[F, Nothing] <- Stream.eval(Config.load())
-      port = cfg.server.port 
-      //_ <- port.hs
-      host = cfg.server.host
-      //_ <- host.hs
+      cfg <- Stream.eval(Config.load())
 
       client <- BlazeClientBuilder[F](global).stream
       helloWorldAlg = HelloWorld.impl[F]
@@ -43,9 +33,8 @@ object Server {
       finalHttpApp = Logger.httpApp(true, true)(httpApp)
 
       exitCode <- BlazeServerBuilder[F]
-        .bindHttp(port.toInt, host.toString())
         //.bindHttp(cfg.server.port, cfg.server.host)
-        //.bindHttp(8080, "127.0.0.1")
+        .bindHttp(8080, "127.0.0.1")
         .withHttpApp(finalHttpApp)
         .serve
     } yield exitCode
