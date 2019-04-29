@@ -1,6 +1,7 @@
 package tsp
 
-import cats.effect.{ConcurrentEffect, Effect, ExitCode, IO, IOApp, Timer, ContextShift}
+import cats.effect._
+//import cats.effect.{ConcurrentEffect, Effect, ExitCode, IO, IOApp, Timer, ContextShift}
 import cats.implicits._
 import org.http4s.server.blaze.BlazeServerBuilder
 import org.http4s.client.blaze.BlazeClientBuilder
@@ -8,6 +9,9 @@ import org.http4s.implicits._
 import org.http4s.server.middleware.Logger
 import fs2.Stream
 import scala.concurrent.ExecutionContext.global
+
+import config.Config
+
 
 object Server {
 
