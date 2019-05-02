@@ -16,9 +16,9 @@ package object config {
 
   object Config {
 
-    val configPath  = Paths.get ("/home/bku/work/clover/front/src/main/resources/application.conf")
+    val configFile  = Paths.get ("./src/main/resources/application.conf")
 
-    def load(path: Path): IO[Config] = loadConfigF[IO,Config](path)
+    def load(path: Path = configFile): IO[Config] = loadConfigF[IO,Config](path)
 
   }
 }
