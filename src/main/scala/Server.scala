@@ -15,14 +15,10 @@ import config._
 
 object Server {
 
-  val load = Config.load()
-
   def stream[F[_]: ConcurrentEffect](implicit T: Timer[F], C: ContextShift[F]): Stream[F, Nothing] = {
-    val cfg = load.unsafeRunSync
-    
+
     for {
-      
-      //cfg <- Stream.eval(Config.load)
+      cfg <- Stream.eval(Config.load[F]())
 
       client <- BlazeClientBuilder[F](global).stream
       helloWorldAlg = HelloWorld.impl[F]
