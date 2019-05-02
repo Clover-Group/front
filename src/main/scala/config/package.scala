@@ -1,6 +1,6 @@
 
 import cats.effect.IO
-
+import java.nio.file.{Path, Paths}
 import pureconfig._
 import pureconfig.generic.auto._
 import pureconfig.module.catseffect._
@@ -16,7 +16,9 @@ package object config {
 
   object Config {
 
-    def load(configFile: String = "application.conf"): IO[Config] = loadConfigF[IO,Config](configFile)
+    val configPath  = Paths.get ("/home/bku/work/clover/front/src/main/resources/application.conf")
+
+    def load(path: Path): IO[Config] = loadConfigF[IO,Config](path)
 
   }
 }

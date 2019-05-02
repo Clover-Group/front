@@ -15,7 +15,7 @@ import config._
 
 object Server {
 
-  val load = Config.load()
+  val load = Config.load(Config.configPath)
 
   def stream[F[_]: ConcurrentEffect](implicit T: Timer[F], C: ContextShift[F]): Stream[F, Nothing] = {
     val cfg = load.unsafeRunSync
@@ -41,8 +41,8 @@ object Server {
       finalHttpApp = Logger.httpApp(true, true)(httpApp)
 
       exitCode <- BlazeServerBuilder[F]
-        //.bindHttp(cfg.server.port, cfg.server.host)
-        .bindHttp(8080, "127.0.0.1")
+        .bindHttp(cfg.server.port, cfg.server.host)
+        //.bindHttp(8080, "127.0.0.1")
         .withHttpApp(finalHttpApp)
         .serve
     } yield exitCode
