@@ -6,6 +6,11 @@ val LogbackVersion = "1.2.3"
 val PureConfigVersion = "0.10.2"
 val CatsEffectVersion="1.2.0"
 val CatsCoreVersion="2.0.0-M1"
+//val KindProjVersion = "0.10.0"
+val KindProjVersion = "0.9.3"
+val BetterMonadicForVersion = "0.3.0"
+
+resolvers += Resolver.sonatypeRepo("releases")
 
 lazy val root = (project in file("."))
   .settings(
@@ -25,10 +30,12 @@ lazy val root = (project in file("."))
 
       "org.typelevel"   %% "cats-core"            % CatsCoreVersion, 
       "org.typelevel"   %% "cats-effect"          % CatsEffectVersion,
-      "com.github.pureconfig" %% "pureconfig"     % PureConfigVersion
-    ),
-    addCompilerPlugin("org.spire-math" %% "kind-projector"     % "0.9.6"),
-    addCompilerPlugin("com.olegpy"     %% "better-monadic-for" % "0.2.4")
+      "com.github.pureconfig" %% "pureconfig"     % PureConfigVersion,
+      "com.github.pureconfig" %% "pureconfig-cats-effect" % PureConfigVersion
+      //"com.github.pureconfig" %% "pureconfig-fs2" % PureConfigVersion
+    )
+    //addCompilerPlugin("org.spire-math" %% "kind-projector"     % KindProjVersion),
+    //addCompilerPlugin("com.olegpy"     %% "better-monadic-for" % BetterMonadicForVersion)
   )
 
 scalacOptions ++= Seq(

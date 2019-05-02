@@ -10,15 +10,19 @@ import org.http4s.server.middleware.Logger
 import fs2.Stream
 import scala.concurrent.ExecutionContext.global
 
-import config.Config
+import config._
 
 
 object Server {
 
+  val load = Config.load()
+
   def stream[F[_]: ConcurrentEffect](implicit T: Timer[F], C: ContextShift[F]): Stream[F, Nothing] = {
+    val cfg = load.unsafeRunSync
+    
     for {
       
-      cfg <- Stream.eval(Config.load())
+      //cfg <- Stream.eval(Config.load)
 
       client <- BlazeClientBuilder[F](global).stream
       helloWorldAlg = HelloWorld.impl[F]
