@@ -1,5 +1,5 @@
 
-import cats.effect.IO
+import cats.effect.Sync
 import java.nio.file.{Path, Paths}
 import pureconfig._
 import pureconfig.generic.auto._
@@ -18,7 +18,7 @@ package object config {
 
     val configFile  = Paths.get ("./src/main/resources/application.conf")
 
-    def load(path: Path = configFile): IO[Config] = loadConfigF[IO,Config](path)
+    def load[F[_]: Sync](path: Path = configFile): F[Config] = loadConfigF[F,Config](path)
 
   }
 }
