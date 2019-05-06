@@ -1,5 +1,6 @@
 
 import cats.effect.Sync
+import cats.implicits._
 import java.nio.file.{Path, Paths}
 import pureconfig._
 import pureconfig.generic.auto._
@@ -10,9 +11,9 @@ package object config {
 
   case class ServerConfig(host: String ,port: Int)
 
-  case class DatabaseConfig(driver: String, url: String, user: String, password: String)
+  case class DatabaseConfig(driver: String, url: String, user: String, password: String, threads:Int)
 
-  case class Config(server: ServerConfig, database: DatabaseConfig)
+  case class Config(server: ServerConfig, db: DatabaseConfig)
 
   object Config {
 
