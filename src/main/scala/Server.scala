@@ -10,8 +10,9 @@ import org.http4s.server.middleware.Logger
 import fs2.Stream
 import scala.concurrent.ExecutionContext.global
 
+// Server components
 import config._
-
+import db.Database
 
 object Server {
 
@@ -19,6 +20,9 @@ object Server {
 
     for {
       cfg <- Stream.eval(Config.load[F]())
+
+      transactor <- Stream.eval(Database.transactor(cfg.db))
+      _ <- Stream.eval(Database.initialize(transactor))
 
       client <- BlazeClientBuilder[F](global).stream
       helloWorldAlg = HelloWorld.impl[F]
