@@ -19,12 +19,15 @@ object Server {
   def stream[F[_]: ConcurrentEffect](implicit T: Timer[F], C: ContextShift[F]): Stream[F, Nothing] = {
 
     for {
+      // Read global config
       cfg <- Stream.eval(Config.load[F]())
-
+      
+      // Config DBMS
       root = new Database.ServerTransactor[F]
-      xact = root.create(cfg.db) 
-      _ <- Stream.eval(root.init(xact))
+      transactor <- Stream.eval(root.create(cfg.db))
+      _ <- Stream.eval(root.init(transactor))
 
+      // Build HTTP client
       client <- BlazeClientBuilder[F](global).stream
       helloWorldAlg = HelloWorld.impl[F]
       jokeAlg = Jokes.impl[F](client)

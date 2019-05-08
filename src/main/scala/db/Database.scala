@@ -11,9 +11,6 @@ import doobie.implicits._
 
 import config._
 
-
-
-
 object Database {
 
   class ServerTransactor[F[_]:ConcurrentEffect] {
@@ -26,11 +23,14 @@ object Database {
       xa <- HikariTransactor.newHikariTransactor[F](cfg.driver, cfg.url, cfg.user, cfg.password, ce, te)
     } yield xa 
 
-    def init(src:HikariResource): F[Unit] = {
-      ConcurrentEffect[F].unit
+    def init (trans:HikariTransactor[F]): F[Unit] = {
+      trans.configure ( dataSource =>
+        ConcurrentEffect[F].pure {
+          Flyway.configure().dataSource(dataSource).load().migrate()
+        }
+      )
     }
 
-
   }
-
 }
+
