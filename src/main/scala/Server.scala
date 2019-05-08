@@ -21,8 +21,9 @@ object Server {
     for {
       cfg <- Stream.eval(Config.load[F]())
 
-      transactor <- Stream.eval(Database.transactor(cfg.db))
-      _ <- Stream.eval(Database.initialize(transactor))
+      root = new Database.ServerTransactor[F]
+      xact = root.create(cfg.db) 
+      _ <- Stream.eval(root.init(xact))
 
       client <- BlazeClientBuilder[F](global).stream
       helloWorldAlg = HelloWorld.impl[F]

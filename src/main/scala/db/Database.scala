@@ -11,38 +11,26 @@ import doobie.implicits._
 
 import config._
 
+
+
+
 object Database {
 
-  def transactor[F[_]:ConcurrentEffect](cfg: DatabaseConfig)(implicit T: Timer[F], C: ContextShift[F]): Resource[F,HikariTransactor[F]] = for {
-    ce <- ExecutionContexts.fixedThreadPool[F](cfg.threads)
-    te <- ExecutionContexts.cachedThreadPool[F]
-    xa <- HikariTransactor.newHikariTransactor[F](cfg.driver, cfg.url, cfg.user, cfg.password, ce, te)
-  } yield xa
+  class ServerTransactor[F[_]:ConcurrentEffect] {
+  
+    type HikariResource = Resource[F, HikariTransactor[F]]
 
+    def create (cfg: DatabaseConfig)(implicit T: Timer[F], C: ContextShift[F]):HikariResource = for {
+      ce <- ExecutionContexts.fixedThreadPool[F](cfg.threads)
+      te <- ExecutionContexts.cachedThreadPool[F]
+      xa <- HikariTransactor.newHikariTransactor[F](cfg.driver, cfg.url, cfg.user, cfg.password, ce, te)
+    } yield xa 
 
-  def initialize(transactor: HikariTransactor[IO]): IO[Unit] = {
-    transactor.configure { dataSource =>
-      IO {
-        val flyWay = Flyway.configure().dataSource(dataSource).load()
-        flyWay.migrate()
-        ()
-      }
+    def init(src:HikariResource): F[Unit] = {
+      ConcurrentEffect[F].unit
     }
+
+
   }
-
-  //def run(args: List[String]): IO[ExitCode] =
-  //  transactor.use { xa =>
-  //    FirstExample.examples.transact(xa).as(ExitCode.Success)
-  //}
-
-  //def initialize[F[_]:ConcurrentEffect](transactor: HikariTransactor[F]): F[Unit] = {
-  //  transactor.configure { dataSource =>
-  //    //IO.pure {
-  //      val flyWay = Flyway.configure().dataSource(dataSource).load()
-  //      flyWay.migrate()
-  //      ()
-  //    //}
-  //  }
-  //}
 
 }
