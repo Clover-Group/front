@@ -1,4 +1,5 @@
 
+val FS2Version = "1.0.4"
 val Http4sVersion = "0.20.0"
 val CirceVersion = "0.11.1"
 val Specs2Version = "4.1.0"
@@ -11,9 +12,9 @@ val KindProjVersion = "0.9.3"
 val BetterMonadicForVersion = "0.3.0"
 
 
- val DoobieVersion = "0.7.0-M5"
- val H2Version = "1.4.199"
- val FlywayVersion = "5.2.4"
+val DoobieVersion = "0.7.0-M5"
+val H2Version = "1.4.199"
+val FlywayVersion = "5.2.4"
 //resolvers += Resolver.sonatypeRepo("releases")
 
 lazy val root = (project in file("."))
@@ -23,18 +24,19 @@ lazy val root = (project in file("."))
     version := "0.1.0",
     scalaVersion := "2.12.8",
     libraryDependencies ++= Seq(
+      "co.fs2"          %% "fs2-core"             % FS2Version,
       "org.http4s"      %% "http4s-blaze-server"  % Http4sVersion,
       "org.http4s"      %% "http4s-blaze-client"  % Http4sVersion,
       "org.http4s"      %% "http4s-circe"         % Http4sVersion,
       "org.http4s"      %% "http4s-dsl"           % Http4sVersion,
 
-      "org.tpolecat"          %% "doobie-core"    % DoobieVersion,
-      "org.tpolecat"          %% "doobie-h2"      % DoobieVersion,
-      "org.tpolecat"          %% "doobie-hikari"  % DoobieVersion,
+      "org.tpolecat"    %% "doobie-core"          % DoobieVersion,
+      "org.tpolecat"    %% "doobie-h2"            % DoobieVersion,
+      "org.tpolecat"    %% "doobie-hikari"        % DoobieVersion,
 
-      "com.h2database"        %  "h2"             % H2Version,
+      "com.h2database"  %  "h2"                   % H2Version,
 
-      "org.flywaydb"          %  "flyway-core"    % FlywayVersion,
+      "org.flywaydb"    %  "flyway-core"          % FlywayVersion,
 
       "io.circe"        %% "circe-generic"        % CirceVersion,
 

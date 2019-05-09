@@ -23,9 +23,10 @@ object Server {
       cfg <- Stream.eval(Config.load[F]())
       
       // Config DBMS
-      root = new Database.ServerTransactor[F]
-      transactor <- Stream.eval(root.create(cfg.db))
-      _ <- Stream.eval(root.init(transactor))
+      //root = new Database.ServerTransactor[F]
+      //transactor <- Stream.eval(root.create(cfg.db))
+      //_ <- Stream.eval(root.init(transactor))
+      _ <- Stream.eval(Database.dummy)
 
       // Build HTTP client
       client <- BlazeClientBuilder[F](global).stream

@@ -13,6 +13,12 @@ import config._
 
 object Database {
 
+  // this works
+  def dummy[F[_]:Sync] (): F[Unit] = {
+    Sync[F].unit
+  }
+
+  // Concurrent Effect Won't work
   class ServerTransactor[F[_]:ConcurrentEffect] {
   
     type HikariResource = Resource[F, HikariTransactor[F]]
@@ -30,6 +36,7 @@ object Database {
         }
       )
     }
+    
 
   }
 }
